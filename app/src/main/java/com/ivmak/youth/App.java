@@ -12,9 +12,6 @@ import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 
 
-/**
- * @author Ivan Korol
- */
 public class App extends DaggerApplication implements LifecycleObserver {
 
     private static final String TAG = "Application";

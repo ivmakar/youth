@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import com.ivmak.youth.MainActivity
 import com.ivmak.youth.R
+import com.ivmak.youth.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
+
+    private lateinit var binding: MainFragmentBinding
 
     companion object {
         fun newInstance() = MainFragment()
@@ -20,13 +25,12 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         viewModel = (activity as MainActivity).getViewModel(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        binding.addUsersBtn.setOnClickListener {Navigation.findNavController(it).navigate(R.id.usersFragment)}
+
+        return binding.root
     }
 
 }
