@@ -7,4 +7,8 @@ import androidx.room.PrimaryKey
 class User(
     @PrimaryKey
     var name: String
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        return other != null && other is User && other.name == name
+    }
+}

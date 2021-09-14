@@ -9,5 +9,5 @@ class YouthEvent(
     var timestamp: Long,
     var name: String,
     var description: String,
-    var members: List<User>
+    var members: MutableList<User>
 )

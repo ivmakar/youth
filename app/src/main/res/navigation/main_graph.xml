@@ -14,4 +14,9 @@
         android:id="@+id/usersFragment"
         android:name="com.ivmak.youth.ui.users.UsersFragment"
         android:label="UsersFragment" />
+    <fragment
+        android:id="@+id/eventFragment"
+        android:name="com.ivmak.youth.ui.events.EventFragment"
+        android:label="fragment_event"
+        tools:layout="@layout/fragment_event" />
 </navigation>
