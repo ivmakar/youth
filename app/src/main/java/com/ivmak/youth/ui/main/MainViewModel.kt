@@ -32,11 +32,16 @@ class MainViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
     fun deleteUser(user: User) {
         repo.deleteUser(user)
+        updateUsers()
     }
 
 
     fun saveEvent(event: YouthEvent) {
         repo.saveEvent(event)
+    }
+
+    fun deleteEvent(event: YouthEvent) {
+        repo.deleteEvent(event)
     }
 
     fun getEvents(): LiveData<List<YouthEvent>> = repo.getEventsAsync()

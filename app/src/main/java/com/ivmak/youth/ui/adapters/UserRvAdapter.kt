@@ -1,6 +1,7 @@
 package com.ivmak.youth.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ivmak.youth.core.model.User
 import com.ivmak.youth.databinding.RvUserViewBinding
 
-class UserRvAdapter constructor(private val listener: OnUserClickListener) : ListAdapter<User, UserRvAdapter.ViewHolder>(UserDiffCallBack()) {
+class UserRvAdapter constructor(
+    private val listener: OnUserClickListener,
+    private val deleteListener: OnUserDeleteClickListener? = null
+) : ListAdapter<User, UserRvAdapter.ViewHolder>(UserDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -17,7 +21,7 @@ class UserRvAdapter constructor(private val listener: OnUserClickListener) : Lis
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), position)
     }
 
 
@@ -25,20 +29,30 @@ class UserRvAdapter constructor(private val listener: OnUserClickListener) : Lis
         fun onUserClicked(user: User)
     }
 
+    interface OnUserDeleteClickListener {
+        fun onUserDelete(user: User)
+    }
 
-    class ViewHolder constructor(private val binding: RvUserViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: User, listener: OnUserClickListener) {
+    inner class ViewHolder constructor(private val binding: RvUserViewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(user: User, position: Int) {
+            if (deleteListener == null) {
+                binding.deleteBtn.visibility = View.GONE
+            } else {
+                binding.deleteBtn.visibility = View.VISIBLE
+                binding.deleteBtn.setOnClickListener { deleteListener.onUserDelete(user) }
+            }
             binding.root.setOnClickListener { _ -> listener.onUserClicked(user)}
-            binding.userName.text = user.name
+            binding.userName.text = "${position + 1}. ${user.name}"
         }
     }
 
-    private class UserDiffCallBack : DiffUtil.ItemCallback<User>() {
+    class UserDiffCallBack : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
             oldItem.name == newItem.name
 
         override fun areContentsTheSame(oldItem: User, newItem: User): Boolean =
-            oldItem.name == newItem.name
+            false
     }
 }

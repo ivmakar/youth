@@ -25,6 +25,10 @@ class Repository @Inject constructor(private val masterDao: MasterDao) {
         masterDao.save(youthEvent)
     }
 
+    fun deleteEvent(event: YouthEvent) {
+        masterDao.deleteEvent(event)
+    }
+
     fun getEventsAsync(): LiveData<List<YouthEvent>> {
         return masterDao.loadEventsAsync()
     }

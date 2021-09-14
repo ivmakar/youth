@@ -1,6 +1,7 @@
 package com.ivmak.youth.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,10 @@ import com.ivmak.youth.databinding.RvUserViewBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventRvAdapter constructor(private val listener: OnEventClickListener) : ListAdapter<YouthEvent, EventRvAdapter.ViewHolder>(UserDiffCallBack()) {
+class EventRvAdapter constructor(
+    private val listener: OnEventClickListener,
+    private val deleteListener: OnEventDeleteClickListener? = null
+) : ListAdapter<YouthEvent, EventRvAdapter.ViewHolder>(UserDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -19,7 +23,7 @@ class EventRvAdapter constructor(private val listener: OnEventClickListener) : L
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position))
     }
 
 
@@ -27,10 +31,20 @@ class EventRvAdapter constructor(private val listener: OnEventClickListener) : L
         fun onEventClicked(event: YouthEvent)
     }
 
+    interface OnEventDeleteClickListener {
+        fun onEventDelete(event: YouthEvent)
+    }
 
-    class ViewHolder constructor(private val binding: RvUserViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(event: YouthEvent, listener: OnEventClickListener) {
+    inner class ViewHolder constructor(private val binding: RvUserViewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(event: YouthEvent) {
+            if (deleteListener == null) {
+                binding.deleteBtn.visibility = View.GONE
+            } else {
+                binding.deleteBtn.visibility = View.VISIBLE
+                binding.deleteBtn.setOnClickListener { deleteListener.onEventDelete(event) }
+            }
             binding.root.setOnClickListener { _ -> listener.onEventClicked(event)}
             val formatter = SimpleDateFormat.getDateInstance()
             binding.userName.text = "${event.name} ${formatter.format(Date(event.timestamp))}"

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ivmak.youth.MainActivity
 import com.ivmak.youth.R
@@ -53,6 +54,12 @@ class EventFragment : Fragment() {
 
         viewModel.users.observe(viewLifecycleOwner) { u ->
             users = u.toMutableList()
+        }
+
+
+        binding.deleteEventBtn.setOnClickListener {
+            event?.let { it1 -> viewModel.deleteEvent(it1) }
+            Navigation.findNavController(it).popBackStack()
         }
 
 

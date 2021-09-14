@@ -22,6 +22,9 @@ interface MasterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(youthEvent: YouthEvent)
 
+    @Delete
+    fun deleteEvent(youthEvent: YouthEvent)
+
     @Query("SELECT * FROM events ORDER BY timestamp")
     fun loadAllEvents(): List<YouthEvent>
 

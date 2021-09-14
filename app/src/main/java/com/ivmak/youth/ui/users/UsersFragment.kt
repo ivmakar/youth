@@ -16,7 +16,8 @@ import com.ivmak.youth.ui.adapters.UserRvAdapter
 import com.ivmak.youth.ui.main.MainFragment
 import com.ivmak.youth.ui.main.MainViewModel
 
-class UsersFragment : Fragment(), UserRvAdapter.OnUserClickListener {
+class UsersFragment : Fragment(), UserRvAdapter.OnUserClickListener,
+    UserRvAdapter.OnUserDeleteClickListener {
 
     private lateinit var viewModel: MainViewModel
 
@@ -35,7 +36,7 @@ class UsersFragment : Fragment(), UserRvAdapter.OnUserClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_users, container, false)
         viewModel = (activity as MainActivity).getViewModel(MainViewModel::class.java)
 
-        rvAdapter = UserRvAdapter(this)
+        rvAdapter = UserRvAdapter(this, this)
 
         binding.usersRv.apply {
             layoutManager = LinearLayoutManager(context)
@@ -58,9 +59,14 @@ class UsersFragment : Fragment(), UserRvAdapter.OnUserClickListener {
 
         val user = User(binding.newUserName.text.toString())
         viewModel.saveUser(user)
+        binding.newUserName.text?.clear()
     }
 
     override fun onUserClicked(user: User) {
 
+    }
+
+    override fun onUserDelete(user: User) {
+        viewModel.deleteUser(user)
     }
 }
