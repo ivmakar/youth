@@ -62,6 +62,22 @@ class EventFragment : Fragment() {
             Navigation.findNavController(it).popBackStack()
         }
 
+        binding.saveNameBtn.setOnClickListener {
+            event?.let {
+                it.name = binding.eventName.text.toString()
+                viewModel.saveEvent(it)
+                eventTimestamp?.let { it1 -> viewModel.getEventByTs(it1) }
+            }
+        }
+
+        binding.saveDescriptionBtn.setOnClickListener {
+            event?.let {
+                it.description = binding.eventDescription.text.toString()
+                viewModel.saveEvent(it)
+                eventTimestamp?.let { it1 -> viewModel.getEventByTs(it1) }
+            }
+        }
+
 
         membersAdapter = UserRvAdapter(object : UserRvAdapter.OnUserClickListener {
             override fun onUserClicked(user: User) {
